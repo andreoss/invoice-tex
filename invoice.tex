@@ -1,0 +1,130 @@
+\documentclass[a4paper]{scrlttr2}
+
+% Readable dates
+\usepackage[british]{babel}% http://ctan.org/pkg/babel
+\usepackage[useregional]{datetime2}
+
+% One-page output
+\usepackage[moderate]{savetrees}
+
+% Bold in tabular
+\usepackage{array}
+
+% Comma-separated items
+\usepackage[inline]{enumitem}
+
+% \href
+\usepackage[colorlinks=false]{hyperref}
+
+% Logo & QR
+\usepackage{qrcode}
+\usepackage{graphics}
+
+% Math
+\usepackage{tikz}
+
+\newcommand{\username}{John Deer}
+
+\DTMsavedate{startdate}{2020-01-01}
+\DTMsavedate{enddate}  {2020-01-31}
+
+\setkomavar{fromname}{\textbf{\username}}
+\setkomavar{fromaddress}{\textit{Contractor's adress}}
+\setkomavar{fromphone}[]{\href{tel:+00000000000}{+0 000 000 00 00}}
+\setkomavar{fromemail}[]{\href{mailto:example@example.com}{example@example.com}}
+\setkomavar{title}{}
+\setkomavar{subject}{}
+\setkomavar{date}{%
+  \today
+}
+\setkomavar{invoice}{0}
+\setkomavar{customer}{--}
+\setkomavar{location}{}
+\setkomavar{place}{}
+\setkomavar{signature}{}
+\setkomavar{firstfoot}{}
+\setkomavar{fromlogo}{%
+  % \includegraphics{logo.png}
+  \qrcode[height=1in]{
+    Secret data inside QR code.
+  }
+}
+\setkomavar{frombank}[]{
+\\
+\tiny
+\begin{tabular}{>{\bfseries}l l}
+  Correspondent Bank: & WALL STREET BANK NEW YORK, USA 
+  \\
+  SWIFT Code: & ABCD0000
+  \\
+  ABA Nr.: &  000000000
+  \\
+  \hline
+  Beneficiary Bank: & BENEFICIARY BANK
+  \\
+  SWIFT Code: & XYZ00
+  \\
+  Account Nr.: & 000000
+  \\
+  \hline
+  Final Beneficiary: & \username, Account № 000000
+  \\
+\end{tabular}
+}
+
+\begin{document}
+
+\begin{letter}{
+    \textbf{Client}\\
+    \textit{Client's address 1}\\
+    \textit{Client's adresss 2}  \\
+}
+
+%\KOMAoptions{fromphone=true,fromfax=false}
+\KOMAoptions{
+  backaddress      = false,
+  enlargefirstpage = false,
+  firstfoot        = true,
+  fromalign        = left,
+  fromemail        = true,
+  fromlogo         = true,
+  fromphone        = true,
+  fromurl          = false,
+  parskip          = half*,
+}
+\opening{
+  Period of services: \DTMusedate{startdate}--\DTMusedate{enddate}
+}
+\begin{center}
+\begin{tabular}{ r | c | l }
+    Worked hours & Rate & Amount with currency
+    \\
+    \hline
+    \pgfmathparse{120}
+    \pgfmathresult & 1.0 & 256 USD
+    \\
+\end{tabular}
+
+
+\pgfmathparse{40 * 1.0 * 256}
+Tax if needed: --
+\\
+Total amount: \textbf{ \pgfmathresult \hspace{0.5em} USD }
+\end{center}
+
+Terms of payment: \textit{the payment is expected within 30 days after the invoice date.}
+\\
+\\
+Banks details where to pay:
+\\
+\\
+\parbox[b]{\linewidth}{%
+   \def\\{}\usekomavar{frombank}%
+}%
+\\
+
+\closing{}
+\ps{}
+
+\end{letter}
+\end{document}
